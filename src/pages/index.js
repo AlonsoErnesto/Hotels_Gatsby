@@ -1,31 +1,51 @@
-import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import React from "react"
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+//components
+import Layout from '../components/layout';
+import ImagenHotel from '../components/imagenHotel';
+import ContenidoInicio from '../components/contenidoInicio';
+import HabitacionPreview from '../components/habitacionPreview';
 
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+//hooks
+import useHabitaciones from "../Hooks/useHabitacion";
 
-const IndexPage = () => (
-  <Layout>
-    <Seo title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <StaticImage
-      src="../images/gatsby-astronaut.png"
-      width={300}
-      quality={95}
-      formats={["auto", "webp", "avif"]}
-      alt="A Gatsby astronaut"
-      style={{ marginBottom: `1.45rem` }}
-    />
-    <p>
-      <Link to="/page-2/">Go to page 2</Link> <br />
-      <Link to="/using-typescript/">Go to "Using TypeScript"</Link> <br />
-      <Link to="/using-ssr">Go to "Using SSR"</Link> <br />
-      <Link to="/using-dsg">Go to "Using DSG"</Link>
-    </p>
-  </Layout>
-)
+const ListadoHabitaciones = styled.ul`
+    max-width:1200px;
+    width:95%;
+    margin: 4rem auto 0 auto;
+    
+    @media (min-width:768px){
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      column-gap:3rem;
+    }
+`;
+
+const IndexPage = () => { 
+
+  
+  const habitaciones = useHabitaciones();
+  console.log(habitaciones)
+
+  return ( 
+      <Layout>
+          <ImagenHotel/>
+          <ContenidoInicio/>
+          <h2 css={css`
+              text-align:center;
+              margin-top:5rem;
+              font-size:3rem;
+          `}>
+            Nuestras Habitaciones
+          </h2>
+          <ListadoHabitaciones>
+            {habitaciones.map(habitacion => (
+                <HabitacionPreview key={habitacion.id} habitacion={habitacion}/>
+            ))}
+          </ListadoHabitaciones>
+      </Layout>
+   )
+}
 
 export default IndexPage
